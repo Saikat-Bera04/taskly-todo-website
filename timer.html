@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskly - Timer Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="gif-background">
+        <img src="https://i.pinimg.com/originals/4c/23/98/4c2398e6be397bb08b5cb70b2192d730.gif" alt="Weather background">
+    </div>
+
+    
+    <nav class="glass-nav">
+        <a href="todo.html" class="nav-item">To-Do</a>
+        <a href="timer.html" class="nav-item active">Timer Mode</a>
+        <a href="tasks.html" class="nav-item">Task Mode</a>
+    </nav>
+    
+    <div class="timer-container">
+    <div class="glass-card timer-card">
+        <h2>Set Timer</h2>
+        <div class="timer-controls">
+            <div class="time-selectors">
+                <select id="hours">
+                    <option value="0">0 hours</option>
+                    <option value="1">1 hour</option>
+                    <option value="2">2 hours</option>
+                    <option value="3">3 hours</option>
+                    <option value="4">4 hours</option>
+                    <option value="5">5 hours</option>
+                </select>
+                <select id="minutes">
+                    <option value="0">0 minutes</option>
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                </select>
+            </div>
+            <button id="start-timer">Start Timer</button>
+        </div>
+        
+        <div id="timer-display" class="timer-display hidden">
+            <div id="time" class="digital-timer">00:00:00</div>
+            <div class="timer-buttons">
+                <button id="stop-timer">Stop</button>
+                <button id="mute-timer">Mute</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <button class="home-button" onclick="window.location.href='index.html'">
+    <svg viewBox="0 0 24 24">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+</button>
+    <!-- Add this audio element at the bottom of the body -->
+<audio id="timer-sound" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2021/11/05/audio_6143477a00.mp3" type="audio/mpeg">
+</audio>
+    
+    <script src="main.js"></script>
+    <script>
+       // Update the timer functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const startBtn = document.getElementById('start-timer');
+    const stopBtn = document.getElementById('stop-timer');
+    const muteBtn = document.getElementById('mute-timer');
+    const timerDisplay = document.getElementById('timer-display');
+    const timeDisplay = document.getElementById('time');
+    const timerSound = document.getElementById('timer-sound');
+    
+    let timer;
+    let totalSeconds = 0;
+    let isMuted = false;
+
+    startBtn.addEventListener('click', function() {
+        const hours = parseInt(document.getElementById('hours').value);
+        const minutes = parseInt(document.getElementById('minutes').value);
+        
+        totalSeconds = (hours * 3600) + (minutes * 60);
+        
+        if (totalSeconds > 0) {
+            timerDisplay.classList.remove('hidden');
+            startTimer();
+            // Play the timer sound
+            timerSound.currentTime = 0;
+            timerSound.play();
+        }
+    });
+    
+    stopBtn.addEventListener('click', function() {
+        clearInterval(timer);
+        timerSound.pause();
+        timerDisplay.classList.add('hidden');
+    });
+    
+    muteBtn.addEventListener('click', function() {
+        isMuted = !isMuted;
+        timerSound.muted = isMuted;
+        muteBtn.textContent = isMuted ? 'Unmute' : 'Mute';
+    });
+    
+    function startTimer() {
+        updateTimerDisplay();
+        
+        timer = setInterval(function() {
+            totalSeconds--;
+            updateTimerDisplay();
+            
+            if (totalSeconds <= 0) {
+                clearInterval(timer);
+                // Sound will keep playing until stopped
+            }
+        }, 1000);
+    }
+    
+    function updateTimerDisplay() {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        
+        timeDisplay.textContent = 
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+});
+    </script>
+</body>
+</html>
