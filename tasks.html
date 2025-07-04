@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskly - Task Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="gif-background">
+        <img src="	https://i.pinimg.com/originals/57/b9/e5/57b9e5526b70cecc4558a284330e0c1d.gif" alt="Weather background">
+    </div>
+
+    
+    <nav class="glass-nav">
+        <a href="todo.html" class="nav-item">To-Do</a>
+        <a href="timer.html" class="nav-item">Timer Mode</a>
+        <a href="tasks.html" class="nav-item active">Task Mode</a>
+    </nav>
+    
+    <div class="calendar-container">
+        <div class="glass-card calendar-card">
+            <h2>Daily Tasks Calendar</h2>
+            <div class="calendar-header">
+                <button id="prev-month">&lt;</button>
+                <h3 id="current-month">Month Year</h3>
+                <button id="next-month">&gt;</button>
+            </div>
+            <div id="calendar-grid" class="calendar-grid"></div>
+            
+            <div class="task-input">
+                <input type="text" id="daily-task" placeholder="Add task for selected day">
+                <button id="add-daily-task">Add Task</button>
+            </div>
+            
+            <div id="daily-tasks" class="daily-tasks">
+                <h3>Tasks for <span id="selected-date">Select a date</span></h3>
+                <ul id="tasks-list"></ul>
+            </div>
+        </div>
+    </div>
+    <button class="home-button" onclick="window.location.href='index.html'">
+    <svg viewBox="0 0 24 24">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+    </svg>
+</button>
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentDate = new Date();
+            let selectedDate = null;
+            let tasks = JSON.parse(localStorage.getItem('dailyTasks')) || {};
+            
+            renderCalendar(currentDate);
+            
+            document.getElementById('prev-month').addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar(currentDate);
+            });
+            
+            document.getElementById('next-month').addEventListener('click', function() {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar(currentDate);
+            });
+            
+            document.getElementById('add-daily-task').addEventListener('click', function() {
+                if (!selectedDate) return;
+                
+                const taskInput = document.getElementById('daily-task');
+                const taskText = taskInput.value.trim();
+                
+                if (taskText) {
+                    const dateKey = formatDateKey(selectedDate);
+                    
+                    if (!tasks[dateKey]) {
+                        tasks[dateKey] = [];
+                    }
+                    
+                    tasks[dateKey].push(taskText);
+                    localStorage.setItem('dailyTasks', JSON.stringify(tasks));
+                    renderTasksForDate(selectedDate);
+                    taskInput.value = '';
+                }
+            });
+            
+            function renderCalendar(date) {
+                const monthYear = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+                document.getElementById('current-month').textContent = monthYear;
+                
+                const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                
+                const daysInMonth = lastDay.getDate();
+                const startingDay = firstDay.getDay();
+                
+                const calendarGrid = document.getElementById('calendar-grid');
+                calendarGrid.innerHTML = '';
+                
+                // Add day headers
+                const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                days.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'calendar-day-header';
+                    dayHeader.textContent = day;
+                    calendarGrid.appendChild(dayHeader);
+                });
+                
+                // Add empty cells for days before the first day of the month
+                for (let i = 0; i < startingDay; i++) {
+                    const emptyCell = document.createElement('div');
+                    emptyCell.className = 'calendar-day empty';
+                    calendarGrid.appendChild(emptyCell);
+                }
+                
+                // Add days of the month
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayCell = document.createElement('div');
+                    dayCell.className = 'calendar-day';
+                    dayCell.textContent = day;
+                    
+                    const currentDate = new Date(date.getFullYear(), date.getMonth(), day);
+                    const dateKey = formatDateKey(currentDate);
+                    
+                    if (tasks[dateKey] && tasks[dateKey].length > 0) {
+                        dayCell.classList.add('has-tasks');
+                    }
+                    
+                    dayCell.addEventListener('click', function() {
+                        selectedDate = currentDate;
+                        renderTasksForDate(currentDate);
+                        
+                        // Remove selected class from all days
+                        document.querySelectorAll('.calendar-day').forEach(cell => {
+                            cell.classList.remove('selected');
+                        });
+                        
+                        // Add selected class to clicked day
+                        dayCell.classList.add('selected');
+                    });
+                    
+                    calendarGrid.appendChild(dayCell);
+                }
+            }
+            
+            function renderTasksForDate(date) {
+                const dateKey = formatDateKey(date);
+                const dateString = date.toLocaleDateString('default', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                
+                document.getElementById('selected-date').textContent = dateString;
+                
+                const tasksList = document.getElementById('tasks-list');
+                tasksList.innerHTML = '';
+                
+                if (tasks[dateKey] && tasks[dateKey].length > 0) {
+                    tasks[dateKey].forEach((task, index) => {
+                        const taskItem = document.createElement('li');
+                        taskItem.className = 'daily-task-item';
+                        taskItem.innerHTML = `
+                            <span>${task}</span>
+                            <button class="delete-task" data-date="${dateKey}" data-index="${index}">×</button>
+                        `;
+                        tasksList.appendChild(taskItem);
+                    });
+                } else {
+                    const noTasks = document.createElement('li');
+                    noTasks.textContent = 'No tasks for this day';
+                    tasksList.appendChild(noTasks);
+                }
+                
+                // Add event listeners to delete buttons
+                document.querySelectorAll('.delete-task').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const dateKey = this.getAttribute('data-date');
+                        const index = parseInt(this.getAttribute('data-index'));
+                        
+                        tasks[dateKey].splice(index, 1);
+                        if (tasks[dateKey].length === 0) {
+                            delete tasks[dateKey];
+                        }
+                        
+                        localStorage.setItem('dailyTasks', JSON.stringify(tasks));
+                        renderTasksForDate(date);
+                        renderCalendar(currentDate);
+                    });
+                });
+            }
+            
+            function formatDateKey(date) {
+                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+            }
+        });
+    </script>
+</body>
+</html>
