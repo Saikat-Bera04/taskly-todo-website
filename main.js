@@ -1,4 +1,4 @@
-// Update clock and calendar on main page
+// Update clock and calendar on main page 
 function updateClock() {
     const now = new Date();
     const clock = document.getElementById('clock');
