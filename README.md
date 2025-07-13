@@ -20,17 +20,6 @@ A beautifully designed, responsive To-Do web application that helps you stay foc
 - 🎨 **Modern, glass-themed UI**
 - 💻 **Fully responsive** – works on desktop, tablet, and mobile
 - ⚡ **No login required** – lightweight and fast
-
----
-
-## 📸 Screenshots
-
-
-<img width="1410" height="713<img width="1410" height="713" alt="Screenshot 2025-07-13 at 8 49 54 AM" src="https://github.com/user-attachments/assets/4b06f0e8-0ad9-49e8-ac94-723b7d1d0e96" />
-" alt="Screenshot 2025-07-13 at 8 49 30 AM" src="https://github.com/user-attachments/assets/78e674b5-38f7-4355-9da2-7335bc0201f6" />
-<img width="1410" height="713" alt="Screenshot 2025-07-13 at 8 50 16 AM" src="https://github.com/user-attachments/assets/df97420c-d2b9-415d-a5db-17a5a98a17bc" />
-<img width="1410" height="713" alt="Screenshot 2025-07-13 at 8 50 36 AM" src="https://github.com/user-attachments/assets/3ebaef6c-8bac-4d98-aaaf-e59fabc5ce33" />
-
 ---
 
 ## 🚀 Getting Started
