@@ -10,8 +10,6 @@ Here's a professional and well-structured `README.md` file for your Taskly To-Do
 
 A beautifully designed, responsive To-Do web application that helps you stay focused and organized. Taskly combines elegant UI with powerful task-tracking features — all within your browser.
 
-🌐 **Live Demo**: [Visit Taskly](https://saikat-bera04.github.io/taskly-todo-website/todo.html)
-
 ---
 
 ## ✨ Features
