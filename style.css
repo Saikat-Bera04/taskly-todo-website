@@ -10,9 +10,6 @@ body {
     overflow-x: hidden;
     color: white;
 }
-
-
-
 /* Glass Navigation */
 .glass-nav {
     display: flex;
@@ -24,14 +21,11 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
-
 .nav-item {
  /* Font import */
   font-family : "Libertinus Mono", monospace;
   font-weight: 400;
   font-style: normal;
-
-
     margin: 0 1.5rem;
     padding: 0.5rem 1rem;
     text-decoration: none;
