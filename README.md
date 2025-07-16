@@ -1,7 +1,8 @@
 # taskly-todo-website
 Taskly: Glassy, animated task management with tilt effects
 
-Here's a professional and well-structured `README.md` file for your Taskly To-Do website hosted at: [FOLLOW THE LINK 🔗](https://saikat-bera04.github.io/taskly-todo-website/index.html)
+Here's a professional and well-structured `README.md` file for your Taskly To-Do website hosted at:
+[## FOLLOW THE LINK 🔗](https://saikat-bera04.github.io/taskly-todo-website/index.html)
 
 ---
 
